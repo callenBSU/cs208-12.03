@@ -1,8 +1,133 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 a {
   color: #00B7FF;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin: 20px 0 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: #f0f0f0;
+  color: #555;
+  border: 1px solid #ccc;
+}
+
+.badge-done {
+  background: #d4edda;
+  color: #276234;
+  border-color: #b8dfc4;
+}
+
+li.completed span.task-text {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.todo-edit {
+  width: 100%;
+  padding: 10px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.edit-input {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ── Add Task Form ── */
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input-row input[type="text"] {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 280px;
+}
+
+input.input-error {
+  border-color: #c0392b;
+}
+
+/* ── Buttons ── */
+button {
+  font: 13px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 5px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #e8e8e8;
+}
+
+.btn-delete {
+  color: #c0392b;
+  border-color: #e8c4c0;
+}
+
+.btn-delete:hover {
+  background: #fdf0ee;
+}
+
+.btn-save {
+  background: #2a6049;
+  color: #fff;
+  border-color: #2a6049;
+}
+
+.btn-save:hover {
+  background: #1e4a37;
 }

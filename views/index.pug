@@ -1,23 +1,102 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  ol
-  each val in todos
-    li
-      span= val.task + ' - '
-      if val.completed > 0
-        span Completed
-      else
-        span Not Completed
-      form(method='POST' action='/delete')
-        input(type='hidden', name='id', value=val.id)
-        button(type='submit') Delete
+  .container
+    header.app-header
+      h1
+        span.icon ✓
+        | #{title}
 
-  hr
-  h2 Add a new task
-  form(method='POST' action='/create')
-    label(for='task') Task:
-    input(type='text', name='task', id='task', required)
-    button(type='submit') Create Task
+    section.todo-list
+      if todos.length === 0
+        p.empty-state No tasks yet — add one below!
+      else
+        ul
+          each val in todos
+            li(class=val.completed > 0 ? 'todo-item completed' : 'todo-item')
+              .todo-display
+                .task-info
+                  span.task-text= val.task
+                  span(class=val.completed > 0 ? 'badge badge-done' : 'badge badge-pending')
+                    | #{val.completed > 0 ? 'Completed' : 'Not Completed'}
+                .todo-actions
+                  button.btn.btn-edit(type='button', onclick='toggleEdit(this)') Edit
+                  form.delete-form(method='POST', action='/delete')
+                    input(type='hidden', name='id', value=val.id)
+                    button.btn.btn-delete(type='submit') Delete
+
+              .todo-edit(style='display:none')
+                form(method='POST', action='/edit')
+                  input(type='hidden', name='id', value=val.id)
+                  .edit-row
+                    input.edit-input(
+                      type='text',
+                      name='task',
+                      value=val.task,
+                      required,
+                      minlength='1',
+                      placeholder='Task description...'
+                    )
+                    label.completed-label
+                      input(
+                        type='checkbox',
+                        name='completed',
+                        value='1',
+                        checked=val.completed > 0
+                      )
+                      | &nbsp;Mark as Completed
+                  .edit-actions
+                    button.btn.btn-save(type='submit') Save
+                    button.btn.btn-cancel(type='button', onclick='toggleEdit(this)') Cancel
+
+    section.add-task
+      h2 Add a New Task
+      form(method='POST', action='/create')
+        .input-row
+          input#task(
+            type='text',
+            name='task',
+            placeholder='What needs to be done?',
+            required,
+            minlength='1',
+            autocomplete='off'
+          )
+          button.btn.btn-create(type='submit') Add Task
+
+  script.
+    function toggleEdit(btn) {
+      var li = btn.closest('li');
+      var display = li.querySelector('.todo-display');
+      var edit = li.querySelector('.todo-edit');
+      if (edit.style.display === 'none') {
+        display.style.display = 'none';
+        edit.style.display = 'block';
+        edit.querySelector('input[name="task"]').focus();
+      } else {
+        display.style.display = 'flex';
+        edit.style.display = 'none';
+      }
+    }
+
+    // Front-end blank validation for the create form
+    document.querySelector('form[action="/create"]').addEventListener('submit', function(e) {
+      var input = this.querySelector('input[name="task"]');
+      if (!input.value.trim()) {
+        e.preventDefault();
+        input.classList.add('input-error');
+        input.placeholder = 'Task cannot be blank!';
+        input.focus();
+      }
+    });
+
+    // Front-end blank validation for edit forms
+    document.querySelectorAll('form[action="/edit"]').forEach(function(form) {
+      form.addEventListener('submit', function(e) {
+        var input = this.querySelector('input[name="task"]');
+        if (!input.value.trim()) {
+          e.preventDefault();
+          input.classList.add('input-error');
+          input.focus();
+        }
+      });
+    });

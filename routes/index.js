@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
-/* GET home page. */
+ 
 router.get('/', function(req, res, next){
   try {
     req.db.query('SELECT * FROM todos;', (err, results) => {
@@ -16,41 +15,75 @@ router.get('/', function(req, res, next){
     res.status(500).send('Error fetching items');
   }
 });
-
+ 
 router.post('/create', function (req, res, next) {
-    const { task } = req.body;
-    try {
-      req.db.query('INSERT INTO todos (task) VALUES (?);', [task], (err, results) => {
-        if (err) {
-          console.error('Error adding todo:', err);
-          return res.status(500).send('Error adding todo');
-        }
-        console.log('Todo added successfully:', results);
-        // Redirect to the home page after adding
-        res.redirect('/');
-      });
-    } catch (error) {
-      console.error('Error adding todo:', error);
-      res.status(500).send('Error adding todo');
-    }
-});
-
-router.post('/delete', function (req, res, next) {
-    const { id } = req.body;
-    try {
-      req.db.query('DELETE FROM todos WHERE id = ?;', [id], (err, results) => {
-        if (err) {
-          console.error('Error deleting todo:', err);
-          return res.status(500).send('Error deleting todo');
-        }
-        console.log('Todo deleted successfully:', results);
-        // Redirect to the home page after deletion
-        res.redirect('/');
+  const { task } = req.body;
+ 
+  // Backend blank-task validation
+  if (!task || task.trim() === '') {
+    return res.status(400).send('Task cannot be blank.');
+  }
+ 
+  try {
+    req.db.query('INSERT INTO todos (task) VALUES (?);', [task.trim()], (err, results) => {
+      if (err) {
+        console.error('Error adding todo:', err);
+        return res.status(500).send('Error adding todo');
+      }
+      console.log('Todo added successfully:', results);
+      res.redirect('/');
     });
-    }catch (error) {
-        console.error('Error deleting todo:', error);
-        res.status(500).send('Error deleting todo:');
-    }
+  } catch (error) {
+    console.error('Error adding todo:', error);
+    res.status(500).send('Error adding todo');
+  }
 });
-
+ 
+router.post('/delete', function (req, res, next) {
+  const { id } = req.body;
+  try {
+    req.db.query('DELETE FROM todos WHERE id = ?;', [id], (err, results) => {
+      if (err) {
+        console.error('Error deleting todo:', err);
+        return res.status(500).send('Error deleting todo');
+      }
+      console.log('Todo deleted successfully:', results);
+      res.redirect('/');
+    });
+  } catch (error) {
+    console.error('Error deleting todo:', error);
+    res.status(500).send('Error deleting todo');
+  }
+});
+ 
+router.post('/edit', function (req, res, next) {
+  const { id, task, completed } = req.body;
+ 
+  // Backend blank-task validation
+  if (!task || task.trim() === '') {
+    return res.status(400).send('Task cannot be blank.');
+  }
+ 
+  // completed checkbox sends '1' when checked, undefined when unchecked
+  const completedValue = completed === '1' ? 1 : 0;
+ 
+  try {
+    req.db.query(
+      'UPDATE todos SET task = ?, completed = ? WHERE id = ?;',
+      [task.trim(), completedValue, id],
+      (err, results) => {
+        if (err) {
+          console.error('Error editing todo:', err);
+          return res.status(500).send('Error editing todo');
+        }
+        console.log('Todo edited successfully:', results);
+        res.redirect('/');
+      }
+    );
+  } catch (error) {
+    console.error('Error editing todo:', error);
+    res.status(500).send('Error editing todo');
+  }
+});
+ 
 module.exports = router;
