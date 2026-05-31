@@ -1,11 +1,45 @@
-# CS208 Full Stack Final Project
+# CS208 Full Stack Lab - TODO List
 
-## Documentation
+- Name: Connor Allen
+- GitHub: [https://github.com/callenBSU](https://github.com/callenBSU)
+- Term: Summer 2026
 
-- Running the example project is documented [here](docs/example_project.md)
-- An example README is provided [here](docs/README_example.md)
+## Project Description
 
-Students must **replace** this README with a README that is specific to your
-project. **IMPORTANT**: If you do not complete the README, your project will not
-be graded, and you will receive a zero. The TA will not guess how to set up,
-configure, and run your project.
+Full-stack web dev assignment for CS208 Summer. This is a basic to-do list that allows you to add, edit, delete, and check off tasks. Note: to check off a task, click Edit and check off "mark as completed"
+
+## Install the Database
+
+Run the following script in your terminal. Make sure you are in Github codespaces instead of the windows vscode app.
+
+```bash
+./setup_scripts/install_db.sh
+```
+
+## Create the Database Tables
+
+Generate initial tables with this command:
+
+```bash
+sudo mysql -u root -p < ./setup_scripts/create_demo_table.sql
+```
+
+## Install Dependencies
+
+Install npm dependences:
+
+```bash
+npm install
+```
+
+## Run the Application
+
+Start app:
+
+```bash
+npm start
+```
+
+## Access the Application
+
+Through codespaces, click on "Open in browser" once the windows pops up in the bottom right. 
